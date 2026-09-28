@@ -1,5 +1,4 @@
 {
-  "homepage": "https://modeslatt.github.io/",
   "name": "terminal-repository",
   "private": true,
   "version": "0.0.0",
@@ -7,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist --dotfiles"
   },
   "dependencies": {
-    "gh-pages": "^6.3.0",
     "lucide-react": "^1.48.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -25,6 +26,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^4.7.0",
+    "gh-pages": "^6.3.0",
     "oxlint": "^1.81.0",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
