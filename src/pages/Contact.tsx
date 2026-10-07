@@ -1,4 +1,4 @@
-// import { type FormEvent, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FileText, Mail, Send } from 'lucide-react'
 import { profile } from '@/data/profile'
 import { SectionHeading } from '@/components/ui/SectionHeading'
@@ -13,9 +13,11 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 //   name?: string
 //   email?: string
 //   message?: string
+//   serverError?: string
 // }
 
 // const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+// const BACK_URL: string = import.meta.env.VITE_BACK_URL;
 
 // function validate(values: FormValues): FormErrors {
 //   const errors: FormErrors = {}
@@ -30,7 +32,17 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 export function Contact() {
   // const [values, setValues] = useState<FormValues>({ name: '', email: '', message: '' })
   // const [errors, setErrors] = useState<FormErrors>({})
-  // const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (isSubmitted) setIsSubmitted(false)
+    }, 3000);
+
+    return () => { 
+      clearTimeout(timeout)
+    }
+  }, [isSubmitted])
 
   // function handleChange(field: keyof FormValues, value: string) {
   //   setValues((prev) => ({ ...prev, [field]: value }))
@@ -42,7 +54,17 @@ export function Contact() {
   //   setErrors(validationErrors)
 
   //   if (Object.keys(validationErrors).length === 0) {
-  //     setIsSubmitted(true)
+  //     fetch(BACK_URL + '/send-message', {
+  //       method: "POST",
+  //       body: JSON.stringify(values),
+  //       headers: { "Content-Type": "application/json" }
+  //     }).then(() => {
+  //       setValues({ name: '', email: '', message: '' })
+  //       setIsSubmitted(true)
+  //     }).catch((err: any) => {
+  //       setErrors({ serverError: 'Internal Server Error' })
+  //       console.error(err)
+  //     })
   //   }
   // }
 
@@ -63,12 +85,6 @@ export function Contact() {
               t.me/{profile.telegramHandle.replace('@', '')}
             </a>
           </li>
-          {/* <li className="flex items-center gap-3">
-            <Phone size={16} className="text-term-green" />
-            <a href={`tel:${profile.phone.replace(/[\s()]/g, '')}`} className="text-term-gray hover:text-term-white">
-              {profile.phone}
-            </a>
-          </li> */}
           <li className="flex items-center gap-3">
             <FileText size={16} className="text-term-green" />
             <a href={profile.resumeUrl} target="_blank" rel="noreferrer" className="text-term-gray hover:text-term-white">
@@ -86,7 +102,7 @@ export function Contact() {
             <span className="text-term-gray">&gt;</span> message sent. status: 200 OK. I'll get back to you soon.
           </p>
         ) : (
-          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 animate-fade-up">
             <label className="flex flex-col gap-1 text-sm">
               <span className="text-term-gray-dim">name</span>
               <input
@@ -128,6 +144,7 @@ export function Contact() {
             >
               $ send --message
             </button>
+            {errors.serverError && <span className="text-xs text-term-red">{errors.serverError}</span>}
           </form>
         )}
       </section> */}

@@ -4,7 +4,7 @@ import { BlinkingCursor } from './BlinkingCursor'
 
 const BOOT_LINES = [
   'booting devos v2.1.0...',
-  'mounting /home/acarter... [OK]',
+  'mounting /home/... [OK]',
   'loading shell profile... [OK]',
   'starting portfolio.tsx...',
 ]
@@ -49,7 +49,7 @@ export function BootSequence() {
       role="status"
       aria-label="Loading portfolio"
       onClick={skip}
-      className={`fixed inset-0 z-50 flex cursor-pointer flex-col justify-center bg-term-bg px-6 font-mono text-sm text-term-gray outline-none transition-opacity duration-[250ms] sm:text-base ${
+      className={`fixed inset-0 z-50 flex cursor-pointer flex-col justify-center bg-term-bg px-6 font-mono text-sm text-term-gray outline-none transition-opacity duration-250 sm:text-base ${
         isExiting ? 'opacity-0' : 'opacity-100'
       }`}
     >
