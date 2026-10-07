@@ -1,37 +1,37 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { FileText, Mail, Send } from 'lucide-react'
 import { profile } from '@/data/profile'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 
-// interface FormValues {
-//   name: string
-//   email: string
-//   message: string
-// }
+interface FormValues {
+  name: string
+  email: string
+  message: string
+}
 
-// interface FormErrors {
-//   name?: string
-//   email?: string
-//   message?: string
-//   serverError?: string
-// }
+interface FormErrors {
+  name?: string
+  email?: string
+  message?: string
+  serverError?: string
+}
 
-// const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-// const BACK_URL: string = import.meta.env.VITE_BACK_URL;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const BACK_URL: string = import.meta.env.VITE_BACK_URL;
 
-// function validate(values: FormValues): FormErrors {
-//   const errors: FormErrors = {}
+function validate(values: FormValues): FormErrors {
+  const errors: FormErrors = {}
 
-//   if (values.name.trim().length < 2) errors.name = 'name must be at least 2 characters'
-//   if (!EMAIL_PATTERN.test(values.email)) errors.email = 'enter a valid email address'
-//   if (values.message.trim().length < 10) errors.message = 'message must be at least 10 characters'
+  if (values.name.trim().length < 2) errors.name = 'name must be at least 2 characters'
+  if (!EMAIL_PATTERN.test(values.email)) errors.email = 'enter a valid email address'
+  if (values.message.trim().length < 10) errors.message = 'message must be at least 10 characters'
 
-//   return errors
-// }
+  return errors
+}
 
 export function Contact() {
-  // const [values, setValues] = useState<FormValues>({ name: '', email: '', message: '' })
-  // const [errors, setErrors] = useState<FormErrors>({})
+  const [values, setValues] = useState<FormValues>({ name: '', email: '', message: '' })
+  const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   useEffect(() => {
@@ -44,29 +44,29 @@ export function Contact() {
     }
   }, [isSubmitted])
 
-  // function handleChange(field: keyof FormValues, value: string) {
-  //   setValues((prev) => ({ ...prev, [field]: value }))
-  // }
+  function handleChange(field: keyof FormValues, value: string) {
+    setValues((prev) => ({ ...prev, [field]: value }))
+  }
 
-  // function handleSubmit(event: FormEvent) {
-  //   event.preventDefault()
-  //   const validationErrors = validate(values)
-  //   setErrors(validationErrors)
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault()
+    const validationErrors = validate(values)
+    setErrors(validationErrors)
 
-  //   if (Object.keys(validationErrors).length === 0) {
-  //     fetch(BACK_URL + '/send-message', {
-  //       method: "POST",
-  //       body: JSON.stringify(values),
-  //       headers: { "Content-Type": "application/json" }
-  //     }).then(() => {
-  //       setValues({ name: '', email: '', message: '' })
-  //       setIsSubmitted(true)
-  //     }).catch((err: any) => {
-  //       setErrors({ serverError: 'Internal Server Error' })
-  //       console.error(err)
-  //     })
-  //   }
-  // }
+    if (Object.keys(validationErrors).length === 0) {
+      fetch(BACK_URL + '/send-message', {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: { "Content-Type": "application/json" }
+      }).then(() => {
+        setValues({ name: '', email: '', message: '' })
+        setIsSubmitted(true)
+      }).catch((err: any) => {
+        setErrors({ serverError: 'Internal Server Error' })
+        console.error(err)
+      })
+    }
+  }
 
   return (
     <div className="grid gap-10 sm:grid-cols-2">
@@ -94,7 +94,7 @@ export function Contact() {
         </ul>
       </section>
 
-      {/* <section>
+      <section>
         <SectionHeading command="./send-message.sh" />
 
         {isSubmitted ? (
@@ -147,7 +147,7 @@ export function Contact() {
             {errors.serverError && <span className="text-xs text-term-red">{errors.serverError}</span>}
           </form>
         )}
-      </section> */}
+      </section>
     </div>
   )
 }
