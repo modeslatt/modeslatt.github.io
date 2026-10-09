@@ -32,7 +32,8 @@ function validate(values: FormValues): FormErrors {
 export function Contact() {
   const [values, setValues] = useState<FormValues>({ name: '', email: '', message: '' })
   const [errors, setErrors] = useState<FormErrors>({})
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -54,14 +55,17 @@ export function Contact() {
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
+      setIsLoading(true);
       fetch(BACK_URL + '/send-message', {
         method: "POST",
         body: JSON.stringify(values),
         headers: { "Content-Type": "application/json" }
       }).then(() => {
+        setIsLoading(false);
         setValues({ name: '', email: '', message: '' })
         setIsSubmitted(true)
       }).catch((err: any) => {
+        setIsLoading(false);
         setErrors({ serverError: 'Internal Server Error' })
         console.error(err)
       })
@@ -140,7 +144,8 @@ export function Contact() {
 
             <button
               type="submit"
-              className="self-start border border-term-green px-4 py-2 text-sm text-term-green transition-colors hover:bg-term-green hover:text-term-bg"
+              disabled={isLoading}
+              className="self-start border border-term-green px-4 py-2 text-sm text-term-green transition-colors enabled:hover:bg-term-green enabled:hover:text-term-bg opacity-100 disabled:opacity-60"
             >
               $ send --message
             </button>
